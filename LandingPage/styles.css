@@ -1,0 +1,266 @@
+.parallax-layer {
+  background: transparent;
+}
+body {
+  background: url('images/wallpaper.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+/* styles.css
+   Highly-customizable variables below. Change to theme the page.
+   Designed for Apple-inspired, iOS-style translucency and minimalism.
+*/
+
+:root{
+  /* COLORS */
+  --bg:#0b0b0c;                      /* page background */
+  --vibrant: 10 132 255;             /* accent color (RGB for rgba use) */
+  --glass: 255 255 255;              /* glass base tint (RGB) */
+  --muted: 145 150 160;
+
+  /* LAYOUT */
+  --max-width: 720px;
+  --gutter: 20px;
+  --radius: 16px;
+
+  /* TYPOGRAPHY */
+  --sans-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, system-ui;
+  --name-size: 28px;
+  --tag-size: 14px;
+  --btn-height: 56px;
+
+  /* EFFECTS */
+  --glass-opacity: 0.14;
+  --glass-border-opacity: 0.08;
+  --glass-blur: 18px;
+  --shadow: 0 10px 30px rgba(2,6,23,0.6);
+  --glass-glow: 0 0 40px rgba(var(--vibrant)/8);
+}
+
+/* ---------- Wallpaper + tint overlay (append) ---------- */
+/* expects file at: ./images/wallpaper.jpg */
+
+:root{
+  --wallpaper-tint-top: rgba(var(--glass), 0.04); /* Reduced opacity for more wallpaper visibility */
+  --wallpaper-tint-bottom: rgba(0,0,0,0.18); /* Reduced for better visibility */
+}
+
+/* Replace the page background with wallpaper + tint while preserving translucency.
+   This overrides the existing body background; keep earlier rules if you want to tweak order. */
+body{
+  /* gradient tint sits on top of the wallpaper */
+  background-image:
+    linear-gradient(180deg, var(--wallpaper-tint-top), var(--wallpaper-tint-bottom)),
+    url('images/wallpaper.jpg');
+  background-repeat: no-repeat, no-repeat;
+  background-position: center center, center center;
+  background-size: cover, cover;
+  background-attachment: fixed, fixed;
+  /* keep the existing fallback color */
+  background-color: var(--bg);
+}
+
+/* Slight extra overlay layer to strengthen glass-like tint without changing element markup */
+body::after{
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.10)); /* Reduced opacity */
+  mix-blend-mode: overlay;
+  z-index: 1; /* sits above wallpaper but below main content (container has z-index:5) */
+  opacity: 0.8; /* Slightly reduced */
+}
+
+/* Basic reset */
+* {box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  min-height:100%;
+  font-family:var(--sans-stack);
+  color: #e9eef6;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+
+/* Parallax background layers - adjusted for less obstruction */
+#parallax{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  transform-style:preserve-3d;
+  will-change:transform;
+}
+.parallax-layer{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:160%;
+  height:100%;
+  transform-origin:center;
+  border-radius:40%;
+  filter: blur(60px) saturate(120%);
+  mix-blend-mode:screen;
+  opacity:0.4; /* Reduced opacity to let wallpaper show through more */
+}
+.layer-1{background: linear-gradient(135deg, rgba(10,20,60,0.45), rgba(var(--vibrant)/10)); transform:translate(-50%,-60%) scale(1.2)}
+.layer-2{background: linear-gradient(120deg, rgba(30,10,60,0.25), rgba(var(--vibrant)/12)); transform:translate(-50%,-40%) scale(1.05)}
+.layer-3{background: linear-gradient(60deg, rgba(80,10,30,0.10), rgba(var(--vibrant)/8)); transform:translate(-50%,-20%) scale(0.9)}
+
+/* Main container centers content and constrains width */
+.container{
+  position:relative;
+  z-index:5;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:64px 20px;
+}
+
+/* Glass card base */
+.card{
+  width:100%;
+  max-width:var(--max-width);
+  margin:14px 0;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:18px;
+}
+
+/* Actual glass effect with backdrop-filter - enhanced for Apple's liquid glass look */
+.glass{
+  background: linear-gradient(180deg, rgba(var(--glass), calc(var(--glass-opacity) + 0.05)), rgba(var(--glass), var(--glass-opacity))); /* Slight increase in vibrancy */
+  border: 1px solid rgba(var(--glass), calc(var(--glass-border-opacity) + 0.04));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%); /* Added saturate for more vibrant, liquid feel */
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  color: #f3f6fb;
+}
+
+/* Header (profile area) */
+header.card{
+  display:flex;
+  gap:18px;
+  align-items:center;
+  padding:20px;
+  background: linear-gradient(180deg, rgba(var(--glass), 0.12), rgba(var(--glass), 0.08)); /* Adjusted for liquid glass */
+  border-radius: calc(var(--radius) + 6px);
+}
+
+/* Profile avatar */
+.avatar{
+  width:96px;
+  height:96px;
+  border-radius:22px;
+  object-fit:cover;
+  border:1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 6px 18px rgba(2,6,23,0.5);
+}
+
+/* Name block */
+.meta{flex:1; overflow:hidden}
+.name{
+  margin:0;
+  font-size:var(--name-size);
+  font-weight:700;
+  letter-spacing:-0.02em;
+}
+.tagline{
+  margin:6px 0 0 0;
+  color: rgba(233,238,246,0.78);
+  font-size:var(--tag-size);
+}
+
+/* Links list */
+.links.card{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:18px;
+  align-items:stretch;
+  border-radius: calc(var(--radius) + 6px);
+}
+
+/* Link button style - enhanced for liquid glass */
+.link-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height:var(--btn-height);
+  padding:0 18px;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:600;
+  letter-spacing:0.01em;
+  background: linear-gradient(180deg, rgba(var(--glass),0.08), rgba(var(--glass),0.04)); /* Subtle liquid tint */
+  color:#f6fbff;
+  border:1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 6px 18px rgba(2,6,23,0.28);
+  transition: transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s, background .18s;
+  -webkit-backdrop-filter: blur(10px) saturate(160%); /* Added blur to buttons for liquid glass effect */
+  backdrop-filter: blur(10px) saturate(160%);
+}
+.link-btn:hover{
+  transform:translateY(-6px);
+  box-shadow: 0 20px 40px rgba(2,6,23,0.45), var(--glass-glow);
+  background: linear-gradient(180deg, rgba(var(--glass),0.12), rgba(var(--glass),0.08)); /* Vibrant on hover */
+}
+
+/* Social row */
+.social{
+  display:flex;
+  gap:12px;
+  margin-top:10px;
+  align-items:center;
+}
+.icon{
+  width:20px;
+  height:20px;
+  fill: currentColor;
+  opacity:0.95;
+}
+.social a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:44px;
+  height:44px;
+  background: rgba(255,255,255,0.03);
+  border-radius:10px;
+  color: rgba(var(--vibrant)/1);
+  transition: transform .12s;
+  -webkit-backdrop-filter: blur(8px); /* Added subtle blur for icons */
+  backdrop-filter: blur(8px);
+}
+.social a:hover{ transform: translateY(-4px) }
+
+/* Footer tiny */
+.mini{ text-align:center; padding:12px; font-size:13px; color:rgba(233,238,246,0.6) }
+
+/* Responsive behavior */
+@media (max-width:520px){
+  .avatar{ width:80px; height:80px; border-radius:14px }
+  .name{ font-size:22px }
+  .link-btn{ height:50px; border-radius:10px }
+  header.card{ gap:12px; padding:14px }
+}
+
+/* Accessibility focus */
+a:focus{ outline:2px solid rgba(var(--vibrant)/0.6); outline-offset:3px; border-radius:8px }
+
+/* ---------- macOS-style bounce animation for .social a (append) ---------- */
+@keyframes macos-bounce {
+  0%   { transform: translateY(0) scale(1); }
+  28%  { transform: translateY(-18px) scale(1.02); }
+  55%  { transform: translateY(0) scale(0.995); }
+  72%  { transform: translateY(-8px) scale(1.005); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+.social a.bounce {
+  animation: macos-bounce 640ms cubic-bezier(.22,.9,.35,1) 1;
+  will-change: transform;
+}
